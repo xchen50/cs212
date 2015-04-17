@@ -1,9 +1,11 @@
 import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
 
 public class Driver {
 
 	public static void main(String[] args) throws Exception {
+		
 		
 		Configuration conf = new Configuration(FileSystems.getDefault().getPath("config.json"));
 		try {
@@ -13,13 +15,15 @@ public class Driver {
 			return;
 		}
 		
-		InvertedIndexBuilder invertedIndexBuilder = new InvertedIndexBuilder(
-				conf.getInputPath(), conf.useDigitDelimiter());
+		InvertedIndex invertedIndex 
+			= new InvertedIndexBuilder().getInvertedIndex(conf.getInputPath(), 
+					conf.useDigitDelimiter());
 		
-		invertedIndexBuilder.init();
 	
-		if (conf.getOutputPath() != null)
-			invertedIndexBuilder.printToFile(conf.getOutputPath());
+		if (conf.getOutputPath() != null) {
+			Path outPath = FileSystems.getDefault().getPath(conf.getOutputPath());
+			invertedIndex.printToFile(outPath);
+		}
 	}
 	
 }

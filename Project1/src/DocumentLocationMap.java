@@ -1,5 +1,4 @@
 
-
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -58,14 +57,6 @@ public class DocumentLocationMap {
 		return false;
 	}
 	
-	private String toString(String fileName) {
-		String result = '"' + fileName + '"';
-		for (int location : locationMap.get(fileName)) {
-			result += ", " + location;
-		}
-		return result;
-	}
-	
 	/**
 	 * Return a string representation of this mapping. Keep in mind that concatenating immutable String objects
 	 * is extremely inefficient! Hint: my main toString method iterated over the keys in the mapping and called
@@ -82,6 +73,15 @@ public class DocumentLocationMap {
 		String result = "";
 		for (String fileName : locationMap.keySet()) 
 			result +=  toString(fileName) + "\n";
+		return result;
+	}
+	
+
+	private String toString(String fileName) {
+		String result = '"' + fileName + '"';
+		for (int location : locationMap.get(fileName)) {
+			result += ", " + location;
+		}
 		return result;
 	}
 	

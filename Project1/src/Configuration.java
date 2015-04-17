@@ -39,7 +39,6 @@ public class Configuration {
 	 * @param path - the location of the file 			
 	 */
 	public Configuration(Path path) {
-		//TODO: Complete constructor.
 		this.jsonFilePath = path;
 	}
 	

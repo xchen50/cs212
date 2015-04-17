@@ -23,30 +23,27 @@ public class InvertedIndexBuilder {
 	
 	
 	**/
-	private Path inputPath;
 	private InvertedIndex invertedIndex;
-	private Boolean digitDelimiter;
 	
-	public InvertedIndexBuilder(String inPathStr, Boolean digitDelimiter) {
-		this.inputPath = FileSystems.getDefault().getPath(inPathStr);
-		this.digitDelimiter = digitDelimiter;
+	public InvertedIndexBuilder() {
+		
+	}
+	
+	public InvertedIndex getInvertedIndex(String inPathStr, Boolean digitDelimiter) {
 		invertedIndex = new InvertedIndex();
+		Path inputPath = FileSystems.getDefault().getPath(inPathStr);
+		traversePath(inputPath,  digitDelimiter);
+		return invertedIndex;
 	}
 	
-	public void init() {
-		traversePath(inputPath);
-	}
-	
-	private void traversePath(Path path) {
-		// System.out.println("Traversing: " + path);
+	private void traversePath(Path path, Boolean digitDelimiter) {
 		if (Files.isDirectory(path)) {
 			try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
 				for (Path entry: stream)  {	
-					// System.out.println(entry);
 					if (entry.toString().toLowerCase().endsWith(".txt"))
-						processTextFile(entry);
+						processTextFile(entry, digitDelimiter);
 					else if (Files.isDirectory(entry))
-						traversePath(entry);
+						traversePath(entry, digitDelimiter);
 				}
 			} catch(IOException e) {
 				System.err.println(e.getMessage());
@@ -55,8 +52,7 @@ public class InvertedIndexBuilder {
 		
 	}
 	
-	private void processTextFile(Path path) {
-		// System.out.println("Processing: " + path);
+	private void processTextFile(Path path, Boolean digitDelimiter) {
 		try {
 			int location = 0;
 			Pattern pattern;
@@ -73,15 +69,6 @@ public class InvertedIndexBuilder {
 			System.err.println(e.getMessage());
 		}
 		
-	}
-	
-	public String toString() {
-		return invertedIndex.toString();
-	}
-	
-	public void printToFile(String fileNameStr) {
-		Path filePath = FileSystems.getDefault().getPath(fileNameStr);
-		invertedIndex.printToFile(filePath);
 	}
 	
 }
